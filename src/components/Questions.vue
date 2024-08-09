@@ -1,29 +1,10 @@
 <template>
 
-<header class="header">
-        <h1>Auto-Ecole</h1>
-        <nav>
-          <ul class="nav-links">
-           
-            <li><router-link to="/Apopos">À propos</router-link></li>
-            <li><router-link to="/create-cours">Création de Cours</router-link></li>
-            <li><router-link to="/test-cours">Création de Textes</router-link></li>
-            <li><router-link to="/Create-Questions">Création de Questions</router-link></li>
+<div id="app">
+        <Entete/>
+        <!-- <router-view /> -->
+    </div>
 
-
-            <li><router-link to="/Cours-List">Liste des cours</router-link></li> 
-            <li><router-link to="/QCM">Passer un text</router-link></li>
-
-            <li><router-link to="/Simulation">Simulation de conduite</router-link></li>
-            <!-- <li>
-            <div class="user-info">
-              Welcome, User
-              <button @click="logout">Logout</button>
-            </div>
-          </li> -->
-          </ul>
-        </nav>
-      </header>
 
     <div class="create-question-container">
       <h2>Créer une nouvelle question</h2>
@@ -63,6 +44,7 @@
   </template>
   
   <script setup>
+  import Entete from '@/components/Entete.vue';
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
   

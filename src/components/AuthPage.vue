@@ -24,7 +24,7 @@
         <button type="submit">S'inscrire</button>
       </form>
       
-        <router-link to="/">Connexion</router-link>
+        <router-link to="/login">Connexion</router-link>
       
       <div v-if="error" class="error">{{ error }}</div>
     </div>

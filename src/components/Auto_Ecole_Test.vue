@@ -1,22 +1,8 @@
 <template>
-   <header class="header">
-        <h1>Auto-Ecole</h1>
-        <nav>
-          <ul class="nav-links">
-           
-            <li><router-link to="/Home">À propos</router-link></li>
-            <li><router-link to="/Auto_Ecole">Liste des cours</router-link></li> 
-            <li><router-link to="/Auto_Ecole_Test">Passer un text</router-link></li>
-            <li><router-link to="/Simulation">Simulation de conduite</router-link></li>
-            <li>
-            <div class="user-info">
-              Welcome, User
-              <button @click="logout">Logout</button>
-            </div>
-          </li>
-          </ul>
-        </nav>
-      </header>
+    <div id="app">
+    <Entete/>
+    <!-- <router-view /> -->
+  </div>
 
     <div class="cours-list-container">
       <h2>Liste des tests</h2>
@@ -29,6 +15,7 @@
   </template>
   
   <script setup>
+  import Entete from '@/components/EnteteAcceuil.vue';
   import { ref, onMounted } from 'vue';
   import { useRouter } from 'vue-router';
   import axios from 'axios';
@@ -62,49 +49,70 @@
 
 
 
-
 .header {
-    background-color: #f8f8f8;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 2em;
-  }
-  
-  .nav-links {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
-  }
-  
-  .nav-links li {
-    display: inline;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .section {
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .section h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
+  background-color: rgba(4, 152, 21, 0.559);
+  padding: 20px;
+  margin: 0px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.71);
+  position: relative;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
 
+.header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  color: #333;
+}
 
+.nav-links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.nav-links li {
+  display: inline;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.user-info button:hover {
+  background-color: #0056b3;
+}
 
 
 

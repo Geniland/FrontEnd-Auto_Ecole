@@ -15,6 +15,7 @@
       </form>
 
     <buttom><router-link to="/Authentification">Authentification</router-link></buttom>
+    <p> <buttom><router-link to="/">Accueil</router-link></buttom></p>
       
 
     </div>
@@ -50,7 +51,7 @@
   
           // Rediriger en fonction du rôle
           if (user.role === 'admin') {
-            this.$router.push({ name: 'Entete' });
+            this.$router.push({ name: 'Apropos' });
           } else if (user.role === 'user') {
             this.$router.push({ name: 'Home' });
           } else {
