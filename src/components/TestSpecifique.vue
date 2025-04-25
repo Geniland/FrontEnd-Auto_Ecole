@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-      <Entete/>
+      
       <div class="tests-container">
         <h2>Liste des tests</h2>
         <div class="cours-list-container"> 

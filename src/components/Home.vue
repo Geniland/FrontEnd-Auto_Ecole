@@ -1,50 +1,62 @@
 <template>
-
-  <div id="app">
-    <Entete/>
-    <!-- <router-view /> -->
-  </div>
-
-  <div class="background-video-container">
-    <video autoplay muted loop class="background-video">
-      Votre navigateur ne supporte pas la balise vidéo.
-    </video>
-  </div>
-
-  <div class="content">
-    <div class="intro-text">
-      <p>Bienvenue dans l'application de notre auto-école, votre compagnon de confiance pour apprendre à conduire en toute sécurité. Que vous soyez débutant ou que vous cherchiez à perfectionner vos compétences, notre plateforme vous offre des cours interactifs, des tests pratiques et des simulations de conduite pour vous préparer efficacement à obtenir votre permis. Explorez nos ressources, suivez votre progression et commencez votre voyage vers la liberté de conduire en toute autonomie.</p>
+  <div :class="['app', isDark ? 'dark-theme' : 'light-theme']">
+    <!-- Loader -->
+    <div v-if="loading" class="loader-container">
+      <div class="spinner"></div>
     </div>
-  </div>
 
-  <footer>
-    <div class="footer">
-      <p>Copyright © 2024 Auto-Ecole. Tous droits réservés.</p>
-      <p>Contact : +228 93462153</p>
-      <p>Email : GenilandeE@gmail.com</p>
-      <p>Localisation : Localise moi</p>
+    <!-- Particules -->
+    <div id="particles-js"></div>
+
+    <!-- Gradient animé derrière tout -->
+    <div class="background-gradient"></div>
+
+    <!-- Vidéo sous le contenu principal -->
+    <div class="content-background">
+      <video autoplay muted loop playsinline class="background-video">
+        <source src="/videos/video.mp4" type="video/mp4">
+        Ton navigateur ne supporte pas la vidéo HTML5.
+      </video>
     </div>
-  </footer>
+
+    <!-- Contenu principal -->
+    <div class="content">
+      <!-- <button class="theme-toggle" @click="toggleTheme">
+        {{ isDark ? '☀️ Mode Jour' : '🌙 Mode Nuit' }}
+      </button> -->
+
+      <div class="intro-text animated-fade-in">
+        <h1>Bienvenue !</h1>
+        <p>
+          Explorez nos ressources, suivez votre progression, et commencez votre voyage vers la liberté de conduire en toute autonomie.
+        </p>
+        <!-- <button class="start-button">Commencer</button> -->
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer animated-slide-up">
+      <div class="footer-content">
+        <p>&copy; 2024 Auto-Ecole. Tous droits réservés.</p>
+        <div class="contact-info">
+          <p>📞 +228 93462153</p>
+          <p>✉️ GenilandeE@gmail.com</p>
+          <p>📍 Localise moi</p>
+        </div>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <script setup>
-
-import Entete from '@/components/EnteteAcceuil.vue';
-
-
-// export default {
-//   name: 'App',
-//   components: {
-//     Entete
-//   }
-// }
-
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
-const userName = ref('User')
+const userName = ref('User');
+const loading = ref(true);
+const isDark = ref(false);
 
 const logout = () => {
   localStorage.removeItem('token');
@@ -52,155 +64,204 @@ const logout = () => {
   router.push({ name: 'Login' });
 };
 
+const toggleTheme = () => {
+  isDark.value = !isDark.value;
+};
+
 onMounted(async () => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 2000);
+
   const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-      const response = await axios.get('http://localhost:8000/api/user');
-      userName.value = response.data.name;
-    } else {
+  if (user && user.token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+    const response = await axios.get('http://localhost:8000/api/user');
+    userName.value = response.data.name;
+  } else {
     router.push({ name: 'Login' });
   }
+
+  // Charger particles.js
+  import('particles.js').then((particlesJS) => {
+    particlesJS.default.load('particles-js', '/particles.json');
+  });
 });
 </script>
 
 <style scoped>
-/* Styles inchangés */
-.header {
-  background-color: rgba(4, 152, 21, 0.559);
-  padding: 20px;
-  margin: 0px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.71);
-  position: relative;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
+/* Loader, Spinner... (pareil) */
 
-.header h1 {
-  margin: 0;
-  font-size: 2.5em;
-  color: #333;
-}
-
-.nav-links {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 10px;
-}
-
-.nav-links li {
-  display: inline;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #FFFFFF;
-  font-weight: bold;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.nav-links a:hover {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.user-info button {
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.user-info button:hover {
-  background-color: #0056b3;
-}
-
-.user-info .user-icon {
-  font-size: 1.5em;
-}
-
-.background-video-container {
+/* Particles */
+#particles-js {
   position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -30;
+}
+
+/* Background gradient animé */
+.background-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-45deg, #00c3ff, #ffff1c, #00ff6a, #ff4b2b);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  z-index: -40;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Vidéo en fond */
+.content-background {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  z-index: -1;
+  z-index: -10;
 }
 
 .background-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: translate(-50%, -50%);
+  filter: brightness(0.6);
+}
+
+/* Themes */
+.light-theme {
+  --overlay-bg: rgba(255, 255, 255, 0.7);
+  --text-color: #333333;
+  --btn-bg: #00B894;
+}
+
+.dark-theme {
+  --overlay-bg: rgba(0, 0, 0, 0.6);
+  --text-color: #f5f5f5;
+  --btn-bg: #6366f1;
+}
+
+/* Content avec gradient animé + superposition semi-transparente */
+.content {
+  position: relative;
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  z-index: 1;
+  background: inherit;
+  overflow: hidden;
+}
+
+.content::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--overlay-bg);
+  backdrop-filter: blur(8px);
   z-index: -1;
 }
 
-.content {
-  position: relative;
-  z-index: 1;
-}
-
+/* Intro text */
 .intro-text {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
   max-width: 800px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
-  font-size: 1.1em;
-  color: #333;
-  line-height: 1.6;
+  transition: transform 0.3s;
 }
 
-.intro-text p {
-  margin: 0;
-  padding: 10px 0;
+.intro-text:hover {
+  transform: scale(1.03);
 }
 
+/* Buttons, Footer... (pareil) */
+
+/* Animations */
+.animated-fade-in {
+  animation: fadeIn 2s ease forwards;
+}
+
+.animated-slide-up {
+  animation: slideUp 2s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100%); }
+  100% { transform: translateY(0); }
+}
+
+/* Footer */
 .footer {
-  background-color: #2C3E50B6;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  position: fixed;
   width: 100%;
-  bottom: 0;
-  left: 0;
-  font-family: Arial, sans-serif;
-}
-
-.footer p {
-  margin: 5px 0;
-}
-
-.footer a {
+  background: rgba(44, 62, 80, 0.85);
   color: #ecf0f1;
-  text-decoration: none;
+  padding: 20px 10px;
+  font-size: 0.9em;
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: 0;
+  z-index: 2;
 }
 
-.footer a:hover {
-  text-decoration: underline;
+.footer-content {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px;
 }
+
+.footer-content p {
+  margin: 0;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.contact-info p {
+  margin: 0;
+}
+
+/* Responsive footer */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .contact-info {
+    align-items: center;
+  }
+}
+
 </style>

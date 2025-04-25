@@ -1,32 +1,41 @@
 <template>
-    <div id="app">
-        <Entete/>
-        <!-- <router-view /> -->
+  <transition name="fade-slide">
+    <div class="create-test-container" v-if="showContainer">
+      <h2>Créer un nouveau test</h2>
+      <form @submit.prevent="createTest">
+        <div class="form-group">
+          <label for="cours">Cours :</label>
+          <select id="cours" v-model="selectedCours" required>
+            <option value="" disabled selected>Sélectionnez un cours</option>
+            <option v-for="cours in coursList" :key="cours.id" :value="cours.id">
+              {{ cours.title }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="title">Titre :</label>
+          <input type="text" id="title" v-model="title" placeholder="Entrez le titre du test" required />
+        </div>
+
+        <button type="submit" :disabled="isLoading">
+          <span v-if="isLoading">Création...</span>
+          <span v-else>Créer le test</span>
+        </button>
+      </form>
+
+      <transition name="fade">
+        <p v-if="successMessage" class="success">{{ successMessage }}</p>
+      </transition>
+
+      <transition name="fade">
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      </transition>
     </div>
-    
-  <div class="create-test-container">
-    <h2>Créer un nouveau test</h2>
-    <form @submit.prevent="createTest">
-      <div class="form-group">
-        <label for="cours">Cours:</label>
-        <select id="cours" v-model="selectedCours" required>
-          <option v-for="cours in coursList" :key="cours.id" :value="cours.id">{{ cours.title }}</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="title">Titre:</label>
-        <input type="text" id="title" v-model="title" required />
-      </div>
-      
-      <button type="submit">Créer le test</button>
-    </form>
-    <p v-if="successMessage" class="success">{{ successMessage }}</p>
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
-  </div>
+  </transition>
 </template>
 
 <script setup>
-import Entete from '@/components/Entete.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
@@ -35,205 +44,150 @@ const selectedCours = ref(null);
 const successMessage = ref('');
 const errorMessage = ref('');
 const coursList = ref([]);
+const isLoading = ref(false);
+const showContainer = ref(false);
 
 const fetchCoursList = async () => {
   try {
     const response = await axios.get('http://localhost:8000/api/cours');
-    coursList.value = response.data; // Assuming the API returns an array of courses with `id` and `title` fields
+    coursList.value = response.data;
   } catch (error) {
-    console.error('Failed to fetch courses:', error);
+    console.error('Erreur lors du chargement des cours:', error);
   }
 };
 
-onMounted(fetchCoursList);
+onMounted(() => {
+  showContainer.value = true;
+  fetchCoursList();
+});
 
 const createTest = async () => {
+  isLoading.value = true;
   try {
-    const response = await axios.post('http://localhost:8000/api/test', {
+    await axios.post('http://localhost:8000/api/test', {
       title: title.value,
       cours_id: selectedCours.value,
     });
 
-    successMessage.value = 'Test créé avec succès!';
+    successMessage.value = '✅ Test créé avec succès !';
     errorMessage.value = '';
     title.value = '';
     selectedCours.value = null;
   } catch (error) {
-    errorMessage.value = 'Une erreur s\'est produite lors de la création du test.';
+    errorMessage.value = '❌ Une erreur est survenue. Veuillez réessayer.';
     successMessage.value = '';
+  } finally {
+    isLoading.value = false;
   }
-
-  const logout = () => {
-  localStorage.removeItem('user');
-  axios.defaults.headers.common['Authorization'] = '';
-  router.push({ name: 'Login' });
-};
 };
 </script>
 
 <style scoped>
-.header {
-    background-color: #f8f8f8;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 2em;
-  }
-  
-  .nav-links {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
-  }
-  
-  .nav-links li {
-    display: inline;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .section {
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .section h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-.create-cours-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
+/* --- Animations --- */
+.fade-slide-enter-active {
+  transition: all 0.6s ease;
+}
+.fade-slide-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 
-h2 {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #333;
-}
-
-.form-group {
-  margin-bottom: 15px;
-  text-align: left;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size: 1em;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #2980b9;
-}
-
-.success {
-  color: green;
-}
-
-.error {
-  color: red;
-}
+/* --- Container --- */
 .create-test-container {
   max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 60px auto;
+  padding: 30px;
+  background: linear-gradient(to bottom right, #ffffff, #f0f8ff);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
+/* --- Titles --- */
 h2 {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #333;
+  font-size: 2em;
+  color: #2c3e50;
+  margin-bottom: 25px;
 }
 
+/* --- Form Elements --- */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
 }
 
 select, input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 1em;
+  background-color: #fff;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
 
+/* --- Button --- */
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background-color: #3498db;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.4s ease, transform 0.2s ease;
 }
 
 button:hover {
   background-color: #2980b9;
+  transform: translateY(-2px);
 }
 
+button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* --- Messages --- */
+.success, .error {
+  margin-top: 20px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 8px;
+  animation: pulse 0.4s ease-in-out;
+}
 .success {
-  color: green;
-  margin-top: 20px;
+  color: #2ecc71;
+  background-color: #eafaf1;
+}
+.error {
+  color: #e74c3c;
+  background-color: #fdecea;
 }
 
-.error {
-  color: red;
-  margin-top: 20px;
+/* --- Feedback animation --- */
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>

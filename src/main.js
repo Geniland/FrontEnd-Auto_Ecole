@@ -12,6 +12,10 @@ if (user && user.token) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
 }
 
+
+
+
+
 app.use(router);
 app.mount('#app');
 

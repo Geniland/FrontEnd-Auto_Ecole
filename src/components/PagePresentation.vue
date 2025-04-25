@@ -1,17 +1,10 @@
 <template>
-      <!-- Spinner Start -->
-      <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <!-- Spinner End -->
-
+   
         <!-- Navbar & Hero Start -->
         <div class="container-fluid position-relative p-0">
             <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
                 <a href="" class="navbar-brand p-0">
-                    <h1 class="text-primary"><i class="fas fa-hand-holding-water me-3"></i>Auto-Call</h1>
+                    <h1 class="text-primary"><i class="fas fa-car me-3"></i>Auto-Call</h1>
                     <!-- <img src="img/logo.png" alt="Logo"> -->
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -20,19 +13,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto py-0">
                         <a href="#" class="nav-item nav-link active">Home</a>
-                        <!-- <a href="#" class="nav-item nav-link">About</a>
-                        <a href="#" class="nav-item nav-link">Service</a>
-                        <a href="#" class="nav-item nav-link">Blog</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu m-0">
-                                <a href="#" class="dropdown-item">Our Feature</a>
-                                <a href="#" class="dropdown-item">Our Product</a>
-                                <a href="#" class="dropdown-item">Our Team</a>
-                                <a href="#" class="dropdown-item">Testimonial</a>
-                                <a href="#" class="dropdown-item">404 Page</a>
-                            </div>
-                        </div> -->
+                      
                         <a href="#" class="nav-item nav-link">Contact</a>
                     </div>
                     <div class="d-none d-xl-flex me-3">
@@ -55,21 +36,8 @@
                         <li data-bs-target="#carouselId" data-bs-slide-to="2"></li>
                     </ol>
                     <div class="carousel-inner" role="listbox">
+                        
                         <div class="carousel-item active">
-                            <img src="./assets/carousel-1.jpg" class="img-fluid w-100" alt="Image">
-                            <div class="carousel-caption-1">
-                                <div class="carousel-caption-1-content" style="max-width: 900px;">
-                                    <h4 class="text-white text-uppercase fw-bold mb-4 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s" style="animation-delay: 1s;" >Importance life</h4>
-                                    <h1 class="display-2 text-capitalize text-white mb-4 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1.3s" style="animation-delay: 1.3s;">Un suivi inégal.</h1>
-                                    <p class="mb-5 fs-5 text-white fadeInLeft animated" data-animation="fadeInLeft" data-delay="1.5s" style="animation-delay: 1.5s;">"Préparez-vous à conduire en toute confiance avec notre auto-école ! Avec des cours adaptés à votre rythme, un suivi personnalisé, et des formateurs expérimentés, nous vous accompagnons à chaque étape pour vous assurer de passer votre permis avec succès. Rejoignez-nous et mettez toutes les chances de votre côté pour une conduite sûre et maîtrisée !"</p>
-                                    <div class="carousel-caption-1-content-btn fadeInLeft animated" data-animation="fadeInLeft" data-delay="1.7s" style="animation-delay: 1.7s;">
-                                        <a class="btn btn-primary rounded-pill flex-shrink-0 py-3 px-5 me-2" href="#">Order Now</a>
-                                        <a class="btn btn-secondary rounded-pill flex-shrink-0 py-3 px-5 ms-2" href="#">Free Estimate</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="carousel-item">
                             <img src="./assets/carousel-2.jpg" class="img-fluid w-100" alt="Image">
                             <div class="carousel-caption-2">
                                 <div class="carousel-caption-2-content" style="max-width: 900px;">
@@ -84,41 +52,348 @@
                             </div>
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon btn btn-primary fadeInLeft animated" aria-hidden="true" data-animation="fadeInLeft" data-delay="1.1s" style="animation-delay: 1.3s;"> <i class="fa fa-angle-left fa-3x"></i></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-                        <span class="carousel-control-next-icon btn btn-primary fadeInRight animated" aria-hidden="true" data-animation="fadeInLeft" data-delay="1.1s" style="animation-delay: 1.3s;"><i class="fa fa-angle-right fa-3x"></i></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                   
                 </div>
             </div>
-            <!-- Carousel End -->
-        </div>
-        <!-- Navbar & Hero End -->
+            
+<!-- Mode de payement -->
 
-        <!-- Modal Search Start -->
-        <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen">
-                <div class="modal-content rounded-0">
-                    <div class="modal-header">
-                        <h4 class="modal-title mb-0" id="exampleModalLabel">Search by keyword</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body d-flex align-items-center">
-                        <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text btn border p-3"><i class="fa fa-search text-white"></i></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="containers">
+        <h1>Choisissez votre Pack</h1>
+        <div class="packs">
+            <div class="pack basic">
+                <h2>Pack Basic</h2>
+                <p>Accès aux cours de conduite de base</p>
+                <p class="price">50€</p>
+                <button onclick="selectPack('basic')">Choisir ce Pack</button>
+            </div>
+            <div class="pack standard">
+                <h2>Pack Standard</h2>
+                <p>Accès aux cours de conduite + simulations</p>
+                <p class="price">100€</p>
+                <button onclick="selectPack('standard')">Choisir ce Pack</button>
+            </div>
+            <div class="pack premium">
+                <h2>Pack Premium</h2>
+                <p>Accès complet + coaching personnalisé</p>
+                <p class="price">200€</p>
+                <button onclick="selectPack('premium')">Choisir ce Pack</button>
             </div>
         </div>
-        <!-- Modal Search End -->
+
+        <h1>Modes de Paiement</h1>
+        <div class="payment-methods">
+            <div class="payment-method">
+                <input type="radio" id="credit-card" name="payment-method" value="credit-card">
+                <label for="credit-card">Carte de Crédit</label>
+            </div>
+            <div class="payment-method">
+                <input type="radio" id="paypal" name="payment-method" value="paypal">
+                <label for="paypal">PayPal</label>
+            </div>
+            <div class="payment-method">
+                <input type="radio" id="bank-transfer" name="payment-method" value="bank-transfer">
+                <label for="bank-transfer">Virement Bancaire</label>
+            </div>
+        </div>
+
+        <button class="pay-now" onclick="payNow()">Payer Maintenant</button>
+    </div>
+
+
+    <!-- Prise de rendez vous-->
+     <p><h4>Prise de rendez-vous</h4></p>
+    <p>
+        <div class="calendar">
+        <div class="calendar-header">
+            <button>&lt; Mois précédent</button>
+            <h2>Août 2024</h2>
+            <button>Mois suivant &gt;</button>
+        </div>
+        <div class="days-of-week">
+            <div>Lundi</div>
+            <div>Mardi</div>
+            <div>Mercredi</div>
+            <div>Jeudi</div>
+            <div>Vendredi</div>
+            <div>Samedi</div>
+            <div>Dimanche</div>
+        </div>
+        <div class="hours">
+            <div class="hour-slot">
+                <div class="appointment">10h - 11h</div>
+            </div>
+            <div class="hour-slot"></div>
+            <div class="hour-slot">
+                <div class="appointment">13h - 14h</div>
+            </div>
+            <div class="hour-slot"></div>
+            <div class="hour-slot"></div>
+            <div class="hour-slot"></div>
+            <div class="hour-slot"></div>
+        </div>
+    </div>
+    </p>
+
+
+
+
+
+
+
+    <footer style="background-color: #333; color: #fff; padding: 40px 0; text-align: center;">
+    <div style="max-width: 1200px; margin: auto;">
+        <!-- Section des informations de contact -->
+        <div style="margin-bottom: 20px;">
+            <p style="margin: 5px 0;">Téléphone: +228 93 46 21 53</p>
+            <p style="margin: 5px 0;">Email: info@exemple.com</p>
+            <p style="margin: 5px 0;">Adresse: 123 Rue Exemple, Lome, Togo</p>
+        </div>
+
+        <!-- Section des réseaux sociaux -->
+        <div style="margin-bottom: 20px;">
+            <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/facebook-new.png" alt="Facebook"/>
+            </a>
+            <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/twitter.png" alt="Twitter"/>
+            </a>
+            <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/instagram-new.png" alt="Instagram"/>
+            </a>
+            <a href="#" style="color: #fff; margin: 0 10px; text-decoration: none;">
+                <img src="https://img.icons8.com/material-outlined/24/ffffff/linkedin.png" alt="LinkedIn"/>
+            </a>
+        </div>
+
+        <!-- Section de copyright -->
+        <div style="margin-top: 20px; border-top: 1px solid #555; padding-top: 20px;">
+            <p style="margin: 0;">© 2024 TonEntreprise. Tous droits réservés.</p>
+        </div>
+        </div>
+    </footer>
+   
+    </div>
+    
+      
 </template>
 
 <style scoped>
+
+.containers {
+    width: 100%;
+  
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    justify-content: center
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #3498db;
+}
+
+.packs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+.pack {
+    flex: 1;
+    margin: 0 10px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pack:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pack h2 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+}
+
+.pack p {
+    font-size: 1.2em;
+}
+
+.price {
+    font-size: 1.5em;
+    color: #e74c3c;
+    margin: 20px 0;
+}
+
+.basic {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+}
+
+.standard {
+    background-color: #3498db;
+    color: white;
+}
+
+.premium {
+    background-color: #2ecc71;
+    color: white;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 1.1em;
+}
+
+button:hover {
+    background-color: #1c598a;
+    transform: translateY(-3px);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
+}
+
+.payment-methods {
+    margin-bottom: 40px;
+}
+
+.payment-method {
+    margin-bottom: 15px;
+}
+
+.payment-method input[type="radio"] {
+    margin-right: 10px;
+}
+
+.pay-now {
+    background-color: #e74c3c;
+}
+
+.pay-now:hover {
+    background-color: #c0392b;
+}
+
+
+
+
+
+
+.calendar {
+            width: 100%;
+            
+            background: linear-gradient(135deg, #89fffd, #ef32d9);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            padding: 10px 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .calendar-header h2 {
+            margin: 0;
+        }
+
+        .calendar-header button {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .calendar-header button:hover {
+            background-color: #ddd;
+        }
+
+        .days-of-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-top: 10px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .day {
+            padding: 10px;
+            border-radius: 50%;
+            margin: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .day:hover {
+            background-color: #fff;
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        .hours {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        .hour-slot {
+            background-color: rgba(255, 255, 255, 0.2);
+            margin: 5px;
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .hour-slot:hover {
+            background-color: #fff;
+            color: #333;
+            transform: scale(1.05);
+        }
+
+        .appointment {
+            background-color: rgba(0, 128, 255, 0.8);
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+
+
+
+
+
+
+
+
 
 /*** Navbar ***/
 .navbar-light .navbar-nav .nav-link {

@@ -1,34 +1,32 @@
 <template>
-
-<div id="app">
-    <Entete/>
-    <!-- <router-view /> -->
-  </div>
-
-
+  <div id="app">
+    
     <div class="questions-container">
-     
-      <h2>Questions pour le cours {{ coursId }}</h2>
+      <h2>Questionnaires </h2>
+      <!-- <h2>Questions pour le cours {{ coursId }}</h2> -->
       <div v-if="questions.length > 0">
         <div v-for="question in questions" :key="question.id" class="question-card">
           <h3>{{ question.question_text }}</h3>
-          
-          <ul>
-            <li v-for="answer in question.options" :key="answer.id">
-              <label>
-                <input type="radio" :name="'question-' + question.id" :value="answer.id" v-model="userAnswers[question.id]" />
-                {{ answer.option_text }}
-              </label>
-              <!-- <button @click="deleteAnswer(question.id, answer.id)">Supprimer</button> -->
-            </li>
-          </ul>
+          <!-- Affichage de l'image si elle existe -->
+          <div class="image-and-options">
+            <img v-if="question.image_url" :src="question.image_url" alt="Image de la question" class="question-image" />
+            <ul>
+              <li v-for="answer in question.options" :key="answer.id">
+                <label :class="getAnswerClass(question.id, answer.id)">
+                  <input type="radio" :name="'question-' + question.id" :value="answer.id" v-model="userAnswers[question.id]" />
+                  {{ answer.option_text }}
+                </label>
+              </li>
+            </ul>
+          </div>
         </div>
-        <button @click="submitAnswers">Soumettre les réponses</button>
-        <div v-if="results !== null">
+        <button @click="submitAnswers" class="submit-btn">Soumettre les réponses</button>
+        <div v-if="results !== null" class="results">
           <h3>Résultats</h3>
           <ul>
             <li v-for="(isCorrect, questionId) in results" :key="questionId">
-              Question {{ questionId }}: <span :class="{'correct': isCorrect, 'incorrect': !isCorrect}">{{ isCorrect ? 'Correct' : 'Incorrect' }}</span>
+               <span :class="{'correct': isCorrect, 'incorrect': !isCorrect}">{{ isCorrect ? 'Correct' : 'Incorrect' }}</span>
+              <!-- Question {{ questionId }}: <span :class="{'correct': isCorrect, 'incorrect': !isCorrect}">{{ isCorrect ? 'Correct' : 'Incorrect' }}</span> -->
             </li>
           </ul>
         </div>
@@ -37,201 +35,176 @@
         <p>Aucune question disponible pour ce cours.</p>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import Entete from '@/components/EnteteAcceuil.vue';
-  import { ref, onMounted } from 'vue';
-  import { useRoute } from 'vue-router';
-  import axios from 'axios';
-  
-  const route = useRoute();
-  const coursId = ref(route.params.id);
-  const questions = ref([]);
-  const userAnswers = ref({});
-  const results = ref(null);
-  
-  const fetchQuestions = async () => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/tests/${coursId.value}/questions`);
-      questions.value = response.data;
-    } catch (error) {
-      console.error('Failed to fetch questions:', error);
-    }
-  };
-  
-  const submitAnswers = async () => {
-    try {
-      const response = await axios.post('http://localhost:8000/api/submit-answers', {
-        answers: userAnswers.value,
-      });
-      results.value = response.data;
-    } catch (error) {
-      console.error('Failed to submit answers:', error);
-    }
-  };
-  
-  const deleteQuestion = async (questionId) => {
-    try {
-      await axios.delete(`http://localhost:8000/api/tests/${coursId.value}/questions/${questionId}`);
-      fetchQuestions(); // Refresh questions list
-    } catch (error) {
-      console.error('Failed to delete question:', error);
-    }
-  };
-  
-  const deleteAnswer = async (questionId, answerId) => {
-    try {
-      await axios.delete(`http://localhost:8000/api/questions/${questionId}/options/${answerId}`);
-      fetchQuestions(); // Refresh questions list
-    } catch (error) {
-      console.error('Failed to delete answer:', error);
-    }
+  </div>
+</template>
+
+<script setup>
+import Entete from '@/components/EnteteAcceuil.vue';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+
+const route = useRoute();
+const coursId = ref(route.params.id);
+const questions = ref([]);
+const userAnswers = ref({});
+const results = ref(null);
+
+const fetchQuestions = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8000/api/tests/${coursId.value}/questions`);
+    questions.value = response.data.map(question => ({
+      ...question,
+      image_url: question.image ? `http://localhost:8000/storage/${question.image}` : null
+    }));
+  } catch (error) {
+    console.error('Failed to fetch questions:', error);
+  }
+};
+
+const submitAnswers = async () => {
+  try {
+    const response = await axios.post('http://localhost:8000/api/submit-answers', {
+      answers: userAnswers.value,
+    });
+    results.value = response.data;
+  } catch (error) {
+    console.error('Failed to submit answers:', error);
+  }
+};
+
+const getAnswerClass = (questionId, answerId) => {
+  if (results.value && results.value[questionId] !== undefined) {
+    const isCorrectAnswer = questions.value.find(q => q.id === questionId).correct_option_id === answerId;
+    const userSelected = userAnswers.value[questionId] === answerId;
     
-  };
-  
-  onMounted(fetchQuestions);
-  </script>
-  
-  <style scoped>
+    if (userSelected && !isCorrectAnswer) return 'incorrect';
+    if (isCorrectAnswer) return 'correct';
+  }
+  return '';
+};
 
+onMounted(fetchQuestions);
+</script>
 
+<style scoped>
+.question-image {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-.header {
-    background-color: #f8f8f8;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 2em;
-  }
-  
-  .nav-links {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
-  }
-  
-  .nav-links li {
-    display: inline;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .section {
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .section h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
+.image-and-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.questions-container {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Helvetica Neue', sans-serif;
+  text-align: center;
+}
 
+.questions-container h2 {
+  font-size: 2.2em;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
 
+.question-card {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  .questions-container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: #f4f4f9;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .questions-container h2 {
-    font-size: 2em;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .question-card {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  .question-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .question-card h3 {
-    font-size: 1.5em;
-    color: #555;
-    margin-bottom: 15px;
-  }
-  
-  .question-card ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: left;
-  }
-  
-  .question-card li {
-    margin-bottom: 10px;
-  }
-  
-  .question-card label {
-    display: flex;
-    align-items: center;
-    font-size: 1.1em;
-    color: #666;
-  }
-  
-  .question-card input[type="radio"] {
-    margin-right: 10px;
-  }
-  
-  button {
-    padding: 12px 25px;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    font-size: 1.1em;
-    font-weight: bold;
-  }
-  
-  button:hover {
-    background-color: #2980b9;
-    transform: translateY(-3px);
-  }
-  
-  button:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5);
-  }
-  
-  .results {
-    margin-top: 20px;
-    font-size: 1.2em;
-  }
-  
-  .correct {
-    color: green;
-  }
-  
-  .incorrect {
-    color: red;
-  }
-  </style>
-  
+.question-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.question-card h3 {
+  font-size: 1.6em;
+  color: #444;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.question-card ul {
+  list-style-type: none;
+  padding: 0;
+  text-align: left;
+  margin-top: 15px;
+}
+
+.question-card li {
+  margin-bottom: 12px;
+}
+
+.question-card label {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+  color: #555;
+}
+
+.question-card input[type="radio"] {
+  margin-right: 10px;
+}
+
+button {
+  padding: 14px 30px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.submit-btn {
+  background-color: #28a745;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+.results {
+  margin-top: 20px;
+  font-size: 1.3em;
+}
+
+.correct {
+  color: #28a745;
+}
+
+.incorrect {
+  color: #dc3545;
+}
+</style>

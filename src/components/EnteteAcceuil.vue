@@ -9,16 +9,24 @@
             <li><router-link to="/Auto_Ecole">Liste des cours</router-link></li>
             <li><router-link to="/CoursVideo">Cours vidéo</router-link></li>
             <li><router-link to="/Auto_Ecole_Test">Passer un test</router-link></li>
-            <li><router-link to="/Simulation">Simulation de conduite</router-link></li>
+            <li><router-link to="/chat">Chat</router-link></li>
           </ul>
         </nav>
         <div class="user-info">
           <i class="fas fa-user user-icon"></i> 
           <span class="user-name">{{ userName }}</span>
           <button @click="logout" class="logout-button">Déconnexion</button>
+
+          
+
         </div>
+        
       </div>
     </header>
+    <!-- Main View -->
+    <main class="content">
+      <router-view />
+    </main>
   </div>
 </template>
 

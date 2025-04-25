@@ -1,8 +1,5 @@
 <template>
-<div id="app">
-        <Entete/>
-        <!-- <router-view /> -->
-    </div>
+
 
   <div class="cours-list-container">
     <h2>Liste des cours</h2>

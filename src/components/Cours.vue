@@ -1,33 +1,49 @@
 <template>
-  <div id="app">
-        <Entete/>
-        <!-- <router-view /> -->
+  <div class="dashboard-container">
+    <div class="left-panel">
+      <h1 class="app-title">📚 Auto-École Pro</h1>
+      <p class="subtitle">Ajoutez facilement vos cours en quelques clics.</p>
+      <img src="https://illustrations.popsy.co/gray/laptop-idea.svg" alt="Cours" class="illustration" />
     </div>
 
-  <div class="create-cours-container">
-    <h2>Créer un nouveau cours</h2>
-    <form @submit.prevent="createCours">
-      <div class="form-group">
-        <label for="title">Titre:</label>
-        <input type="text" id="title" v-model="cours.title" required />
+    <div class="right-panel">
+      <div class="form-card">
+        <h2 class="form-title">Créer un nouveau cours</h2>
+
+        <form @submit.prevent="createCours">
+          <div class="form-group">
+            <label for="title">Titre</label>
+            <input type="text" id="title" v-model="cours.title" placeholder="Titre du cours" />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" v-model="cours.description" placeholder="Décrivez brièvement ce cours..." rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="pdf">Fichier PDF</label>
+            <input type="file" id="pdf" @change="handleFileUpload" />
+          </div>
+
+          <button type="submit" class="submit-btn">🚀 Créer le cours</button>
+        </form>
+
+        <transition name="fade">
+          <p v-if="successMessage" class="success-msg">{{ successMessage }}</p>
+        </transition>
+        <transition name="fade">
+          <p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+        </transition>
       </div>
-      <div class="form-group">
-        <label for="description">Description:</label>
-        <textarea id="description" v-model="cours.description" required></textarea>
-      </div>
-      <div class="form-group">
-        <label for="pdf">PDF:</label>
-        <input type="file" id="pdf" @change="handleFileUpload" />
-      </div>
-      <button type="submit">Créer le cours</button>
-    </form>
-    <p v-if="successMessage" class="success">{{ successMessage }}</p>
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    </div>
   </div>
 </template>
 
+
+
 <script setup>
-import Entete from '@/components/Entete.vue';
+
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
@@ -80,105 +96,158 @@ const createCours = async () => {
 </script>
 
 <style scoped>
-.header {
-    background-color: #f8f8f8;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 2em;
-  }
-  
-  .nav-links {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
-  }
-  
-  .nav-links li {
-    display: inline;
-  }
-  
-  .nav-links a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .section {
-    padding: 20px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .section h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-.create-cours-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4ff, #ffffff);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.left-panel {
+  flex: 1;
+  background-color: #eef3fb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 40px;
+  text-align: center;
+  border-right: 1px solid #dce3f1;
+}
+
+.app-title {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.illustration {
+  width: 80%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.right-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 500px;
+  background: #ffffff;
+  padding: 35px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.form-title {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 30px;
   text-align: center;
 }
 
-h2 {
-  margin-bottom: 20px;
-  font-size: 1.8em;
-  color: #333;
-}
-
 .form-group {
-  margin-bottom: 15px;
-  text-align: left;
+  margin-bottom: 20px;
 }
 
-label {
+.form-group label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #555;
+  margin-bottom: 8px;
+  color: #34495e;
+  font-weight: 600;
 }
 
-input, textarea {
+input[type="text"],
+textarea,
+input[type="file"] {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px 14px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+  border-radius: 12px;
   font-size: 1em;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
 }
 
-button {
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.submit-btn {
   width: 100%;
-  padding: 10px;
+  padding: 14px;
   background-color: #3498db;
   color: white;
+  font-size: 1.1rem;
+  font-weight: bold;
   border: none;
-  border-radius: 5px;
-  font-size: 1em;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
-button:hover {
+.submit-btn:hover {
   background-color: #2980b9;
+  transform: scale(1.02);
 }
 
-.success {
-  color: green;
+.success-msg {
+  color: #2ecc71;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
 }
 
-.error {
-  color: red;
+.error-msg {
+  color: #e74c3c;
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .left-panel {
+    border-right: none;
+    border-bottom: 1px solid #dce3f1;
+    padding: 30px;
+  }
+
+  .right-panel {
+    padding: 20px;
+  }
+
+  .illustration {
+    width: 60%;
+  }
 }
 </style>
+
+
